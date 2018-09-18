@@ -7,7 +7,7 @@ using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/Clientes")]
+    [Route("api/clientes")]
     [ApiController]
     public class ClientesController : ControllerBase
     {
@@ -18,8 +18,6 @@ namespace WebAPI.Controllers
         {
             _returnServiceModel = new ReturnServiceModel();
             _serviceAuthentication = new Authentication(contextAccessor);
-
-            Authentication();
         }
 
         private ReturnServiceModel Authentication()
@@ -32,6 +30,7 @@ namespace WebAPI.Controllers
             {
                 _returnServiceModel.Result = false;
                 _returnServiceModel.ErrorMessage = ex.Message;
+                throw;
             }
 
             return _returnServiceModel;
@@ -41,6 +40,8 @@ namespace WebAPI.Controllers
         [Route("listartodos")]
         public IList<ClienteModel> ListarTodos()
         {
+            Authentication();
+
             return new ClienteModel().ListarTodos();
         }
 
@@ -55,6 +56,8 @@ namespace WebAPI.Controllers
         [Route("registarcliente")]
         public ReturnServiceModel RegistrarCliente([FromBody] ClienteModel cliente)
         {
+            Authentication();
+
             try
             {
                 cliente.RegistrarCliente();
@@ -72,6 +75,8 @@ namespace WebAPI.Controllers
         [Route("atualizarcliente/{id}")]
         public ReturnServiceModel AtualizarCliente(int id, [FromBody] ClienteModel cliente)
         {
+            Authentication();
+
             try
             {
                 cliente.AtualizarCliente(id);
@@ -89,6 +94,8 @@ namespace WebAPI.Controllers
         [Route("apagarcliente/{id}")]
         public ReturnServiceModel ApagarCliente(int id)
         {
+            Authentication();
+
             try
             {
                 new ClienteModel().ApagarCliente(id);
