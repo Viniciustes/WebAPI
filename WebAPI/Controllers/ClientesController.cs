@@ -1,33 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Clientes")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ClientesController : ControllerBase
     {
-        // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+
+            return new[] { "value1", "value2" };
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            //var con = new Context.Context();
+
+            //var sql = $"Select * From Cliente Where Id ={id}";
+
+            //var retorno = con.RetornarDataTable(sql);
+
+            //return retorno.Rows[0]["Nome"].ToString();
+            return null;
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("registarcliente")]
+        public void RegistrarCliente([FromBody] ClienteModel cliente)
         {
+            cliente.RegistrarCliente();
         }
 
         // PUT api/values/5
