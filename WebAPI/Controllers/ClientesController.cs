@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models;
+using WebAPI.Services;
 
 namespace WebAPI.Controllers
 {
@@ -8,44 +11,95 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
+        private readonly Authentication _serviceAuthentication;
+        private readonly ReturnServiceModel _returnServiceModel;
+
+        public ClientesController(IHttpContextAccessor contextAccessor)
+        {
+            _returnServiceModel = new ReturnServiceModel();
+            _serviceAuthentication = new Authentication(contextAccessor);
+
+            Authentication();
+        }
+
+        private ReturnServiceModel Authentication()
+        {
+            try
+            {
+                _serviceAuthentication.Authenticate();
+            }
+            catch (Exception ex)
+            {
+                _returnServiceModel.Result = false;
+                _returnServiceModel.ErrorMessage = ex.Message;
+            }
+
+            return _returnServiceModel;
+        }
+
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        [Route("listartodos")]
+        public IList<ClienteModel> ListarTodos()
         {
-
-            return new[] { "value1", "value2" };
+            return new ClienteModel().ListarTodos();
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [HttpGet]
+        [Route("buscarporid/{id}")]
+        public ClienteModel BuscarPorId(int id)
         {
-            //var con = new Context.Context();
-
-            //var sql = $"Select * From Cliente Where Id ={id}";
-
-            //var retorno = con.RetornarDataTable(sql);
-
-            //return retorno.Rows[0]["Nome"].ToString();
-            return null;
+            return new ClienteModel().BuscarPorId(id);
         }
 
-        // POST api/values
         [HttpPost]
         [Route("registarcliente")]
-        public void RegistrarCliente([FromBody] ClienteModel cliente)
+        public ReturnServiceModel RegistrarCliente([FromBody] ClienteModel cliente)
         {
-            cliente.RegistrarCliente();
+            try
+            {
+                cliente.RegistrarCliente();
+            }
+            catch (Exception ex)
+            {
+                _returnServiceModel.Result = false;
+                _returnServiceModel.ErrorMessage = "Erro ao cadastrar um cliente: " + ex.Message;
+            }
+
+            return _returnServiceModel;
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        [Route("atualizarcliente/{id}")]
+        public ReturnServiceModel AtualizarCliente(int id, [FromBody] ClienteModel cliente)
         {
+            try
+            {
+                cliente.AtualizarCliente(id);
+            }
+            catch (Exception ex)
+            {
+                _returnServiceModel.Result = false;
+                _returnServiceModel.ErrorMessage = "Erro ao atualizar um cliente: " + ex.Message;
+            }
+
+            return _returnServiceModel;
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete]
+        [Route("apagarcliente/{id}")]
+        public ReturnServiceModel ApagarCliente(int id)
         {
+            try
+            {
+                new ClienteModel().ApagarCliente(id);
+            }
+            catch (Exception ex)
+            {
+                _returnServiceModel.Result = false;
+                _returnServiceModel.ErrorMessage = "Erro ao apagar um cliente: " + ex.Message;
+            }
+
+            return _returnServiceModel;
         }
     }
 }

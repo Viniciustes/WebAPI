@@ -11,7 +11,7 @@ namespace WebAPI.Context
         private const string Password = "";
         public MySqlConnection Connection { get; }
 
-        private readonly string _connectionString = $"Server ={Server};Database={Database};User={User};Password={Password};Sslmode=none;";
+        private readonly string _connectionString = $"Server ={Server};Database={Database};User={User};Password={Password};Sslmode=none;charset=utf8;";
 
         public Context()
         {
