@@ -20,7 +20,7 @@ namespace WebAPI.Services
         {
             try
             {
-                var sendToken = _contextAccessor.HttpContext.Request.Headers["Token"].ToString();
+                var sendToken = _contextAccessor.HttpContext.Request.Headers["Token!#"].ToString();
 
                 if (!string.Equals(Token, sendToken))
                     throw new Exception(AuthenticationFailure);

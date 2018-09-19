@@ -8,13 +8,14 @@ namespace WebMVC.Requests
     {
         private const string Uri = "http://localhost:55480/api/clientes/";
 
-        private static readonly string Token = "76148021";
+        private static readonly string Token = "76148021-3a15-44ae-a919-58acff976fda";
 
-        public static string RequestGet(string method, string parameter = null)
+        public static string RequestGet(string method, string route, string parameter = null)
         {
-            var request = (HttpWebRequest)WebRequest.Create(Uri + method + "/" + parameter);
+            var request = (HttpWebRequest)WebRequest.Create(Uri + route + "/" + parameter);
 
-            request.Headers.Add("Token", Token);
+            request.Method = method;
+            request.Headers.Add("Token!#", Token);
 
             var response = (HttpWebResponse)request.GetResponse();
 
@@ -23,13 +24,13 @@ namespace WebMVC.Requests
             return responseString;
         }
 
-        public static string RequesPost(string method, string jsonData)
+        public static string Request(string method, string route, string jsonData)
         {
-            var request = (HttpWebRequest)WebRequest.Create(Uri + method);
+            var request = (HttpWebRequest)WebRequest.Create(Uri + route);
 
             var data = Encoding.ASCII.GetBytes(jsonData);
 
-            request.Method = "POST";
+            request.Method = method;
             request.Headers.Add("Token!#", Token);
             request.ContentType = "application/json";
             request.ContentLength = data.Length;

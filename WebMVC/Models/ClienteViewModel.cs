@@ -19,13 +19,33 @@ namespace WebMVC.Models
 
         public IList<ClienteViewModel> ListarTodos()
         {
-            var clientes = new List<ClienteViewModel>();
+            var json = RequestWepApi.RequestGet("GET", "listartodos");
 
-            var json = RequestWepApi.RequestGet("listartodos");
+            return JsonConvert.DeserializeObject<List<ClienteViewModel>>(json);
+        }
 
-            clientes = JsonConvert.DeserializeObject<List<ClienteViewModel>>(json);
+        public ClienteViewModel BuscarPorId(int id)
+        {
+            var json = RequestWepApi.RequestGet("GET", "buscarporid", id.ToString());
 
-            return clientes;
+            return JsonConvert.DeserializeObject<ClienteViewModel>(json);
+        }
+
+        public void Cadastrar()
+        {
+            var json = JsonConvert.SerializeObject(this);
+
+            RequestWepApi.Request("POST", "registarcliente", json);
+        }
+
+        public void Editar(int id)
+        {
+            RequestWepApi.Request("PUT", "atualizarcliente", id.ToString());
+        }
+
+        public void Apagar(int id)
+        {
+            RequestWepApi.Request("DELETE", "apagarcliente", id.ToString());
         }
     }
 }
