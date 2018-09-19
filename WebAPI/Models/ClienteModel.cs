@@ -44,7 +44,7 @@ namespace WebAPI.Models
 
             var context = new Context.Context();
 
-            string sql = "select * from cliente order by name asc";
+            string sql = "select * from cliente order by nome asc";
 
             var dados = context.RetornarDataTable(sql);
 
