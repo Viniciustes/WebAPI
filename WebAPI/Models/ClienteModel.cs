@@ -14,7 +14,7 @@ namespace WebAPI.Models
 
         public string Nome { get; set; }
 
-        public DateTime DataCadastro { get; }
+        public DateTime DataCadastro { get; private set; }
 
         public string Telefone { get; set; }
 
@@ -44,7 +44,7 @@ namespace WebAPI.Models
 
             var context = new Context.Context();
 
-            string sql = "select * fom cliente order by name asc";
+            string sql = "select * from cliente order by name asc";
 
             var dados = context.RetornarDataTable(sql);
 
@@ -74,11 +74,7 @@ namespace WebAPI.Models
         {
             var context = new Context.Context();
 
-            var sql = $"update cliente set" +
-                $"Nome = '{Nome}'," +
-                $"CPF = '{CPF}'," +
-                $"Telefone = '{Telefone}'" +
-                $"where Id = '{id}'";
+            var sql = $"update cliente set Nome = '{Nome}', CPF = '{CPF}', Telefone = '{Telefone}' where Id = '{id}'";
 
             context.ExecutarComandoSql(sql);
         }
@@ -87,7 +83,7 @@ namespace WebAPI.Models
         {
             var context = new Context.Context();
 
-            var sql = $"delete from cliente where id = {id}";
+            var sql = $"delete cliente where id = {id}";
 
             context.ExecutarComandoSql(sql);
         }

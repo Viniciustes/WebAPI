@@ -8,26 +8,9 @@ namespace WebMVC.Controllers
     {
         public IActionResult Index()
         {
-            return View();
-        }
+            var clientes = new ClienteViewModel().ListarTodos();
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return View(clientes);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

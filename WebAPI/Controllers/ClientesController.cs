@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
             _serviceAuthentication = new Authentication(contextAccessor);
         }
 
-        private ReturnServiceModel Authentication()
+        private void Authentication()
         {
             try
             {
@@ -30,18 +30,13 @@ namespace WebAPI.Controllers
             {
                 _returnServiceModel.Result = false;
                 _returnServiceModel.ErrorMessage = ex.Message;
-                throw;
             }
-
-            return _returnServiceModel;
         }
 
         [HttpGet]
         [Route("listartodos")]
         public IList<ClienteModel> ListarTodos()
         {
-            Authentication();
-
             return new ClienteModel().ListarTodos();
         }
 
@@ -56,8 +51,6 @@ namespace WebAPI.Controllers
         [Route("registarcliente")]
         public ReturnServiceModel RegistrarCliente([FromBody] ClienteModel cliente)
         {
-            Authentication();
-
             try
             {
                 cliente.RegistrarCliente();
@@ -75,8 +68,6 @@ namespace WebAPI.Controllers
         [Route("atualizarcliente/{id}")]
         public ReturnServiceModel AtualizarCliente(int id, [FromBody] ClienteModel cliente)
         {
-            Authentication();
-
             try
             {
                 cliente.AtualizarCliente(id);
@@ -94,16 +85,22 @@ namespace WebAPI.Controllers
         [Route("apagarcliente/{id}")]
         public ReturnServiceModel ApagarCliente(int id)
         {
-            Authentication();
-
             try
             {
-                new ClienteModel().ApagarCliente(id);
+                Authentication();
+                try
+                {
+                    new ClienteModel().ApagarCliente(id);
+                }
+                catch (Exception ex)
+                {
+                    _returnServiceModel.Result = false;
+                    _returnServiceModel.ErrorMessage = "Erro ao apagar um cliente: " + ex.Message;
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _returnServiceModel.Result = false;
-                _returnServiceModel.ErrorMessage = "Erro ao apagar um cliente: " + ex.Message;
+                return _returnServiceModel;
             }
 
             return _returnServiceModel;

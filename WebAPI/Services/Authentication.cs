@@ -5,8 +5,9 @@ namespace WebAPI.Services
 {
     public class Authentication
     {
-        private const string TOKEN = "123456";
-        private const string AUTHENTICATION_FAILURE = "Falha de autenticação de Token...";
+        private static readonly string Token = "76148021-3a15-44ae-a919-58acff976fda";
+
+        private const string AuthenticationFailure = "Falha de autenticação de Token...";
 
         private readonly IHttpContextAccessor _contextAccessor;
 
@@ -19,14 +20,14 @@ namespace WebAPI.Services
         {
             try
             {
-                string SendToken = _contextAccessor.HttpContext.Request.Headers["Token"].ToString();
+                var sendToken = _contextAccessor.HttpContext.Request.Headers["Token"].ToString();
 
-                if (!string.Equals(TOKEN, SendToken))
-                    throw new Exception(AUTHENTICATION_FAILURE);
+                if (!string.Equals(Token, sendToken))
+                    throw new Exception(AuthenticationFailure);
             }
             catch (Exception)
             {
-                throw new Exception(AUTHENTICATION_FAILURE);
+                throw new Exception(AuthenticationFailure);
             }
         }
     }
